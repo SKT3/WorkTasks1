@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  app:
+    image: php:8.3-cli
+    container_name: php_app
+    volumes:
+      - ./:/var/www/html
+      - ./phpunit.xml:/var/www/html/phpunit.xml
+      - ./vendor:/var/www/html/vendor
+    working_dir: /var/www/html
+    command: ["php", "-S", "0.0.0.0:8000"]
+
+  phpunit:
+    image: php:8.3-cli
+    container_name: phpunit_container
+    volumes:
+      - ./:/var/www/html
+      - ./phpunit.xml:/var/www/html/phpunit.xml
+      - ./vendor:/var/www/html/vendor
+    working_dir: /var/www/html
+    depends_on:
+      - app
+    entrypoint: ["vendor/bin/phpunit"]
